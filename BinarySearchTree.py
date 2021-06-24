@@ -1,18 +1,7 @@
+from Node import *
+
+
 class BinarySearchTree:
-    class _Node:
-        def __init__(self, data):
-            self._data = data
-            self._left = None
-            self._right = None
-
-        def _has_left(self):
-            return self._left is not None
-
-        def _has_right(self):
-            return self._right is not None
-
-        def _is_leaf(self):
-            return (self._left is None) and (self._right is None)
 
     def __init__(self):
         self._root = None
@@ -28,7 +17,7 @@ class BinarySearchTree:
         return self._size == 0
 
     def add(self, value):
-        node = self._Node(value)
+        node = Node(value)
         if self.is_empty():
             self._root = node
             self._size += 1
@@ -42,15 +31,15 @@ class BinarySearchTree:
         self._delete_Node(self._root, value)
 
     def _delete_Node(self, root, value):
-        if value < root._data:
-            root._left = self._delete_Node(root._left, value)
-        elif value > root._data:
-            root._right = self._delete_Node(root._right, value)
-        elif value == root._data:
-            if root._is_leaf():
+        if value < root.data:
+            root.left = self._delete_Node(root.left, value)
+        elif value > root.data:
+            root.right = self._delete_Node(root.right, value)
+        elif value == root.data:
+            if root.is_leaf():
                 root = None
                 self._size -= 1
-            elif root._has_right():
+            elif root.has_right():
                 root = self._get_successor(root)
                 self._size -= 1
             else:
@@ -61,50 +50,50 @@ class BinarySearchTree:
 
     def _get_successor(self, root):
         """right then always left"""
-        root = root._right
-        while root._has_left():
-            root = root._left
+        root = root.right
+        while root.has_left():
+            root = root.left
 
         return root
 
     def _get_predecessor(self, root):
         """left then always right"""
-        root = root._left
-        while root._has_right():
-            root = root._right
+        root = root.left
+        while root.has_right():
+            root = root.right
         return root
 
     def _insert(self, root, node):
-        if (not root._has_left()) and node._data < root._data:
-            root._left = node
+        if (not root.has_left()) and node.data < root.data:
+            root.left = node
             self._size += 1
-        elif (not root._has_right()) and node._data > root._data:
+        elif (not root.has_right()) and node.data > root.data:
             root._right = node
             self._size += 1
-        elif node._data < root._data:
-            self._insert(root._left, node)
-        elif node._data > root._data:
-            self._insert(root._right, node)
+        elif node.data < root.data:
+            self._insert(root.left, node)
+        elif node.data > root.data:
+            self._insert(root.right, node)
         else:
             return
 
     def _print_inorder(self, node):
         if node is None:
             return
-        self._print_inorder(node._left)
-        print(node._data)
-        self._print_inorder(node._right)
+        self._print_inorder(node.left)
+        print(node.data)
+        self._print_inorder(node.right)
 
     def _print_preorder(self, node):
         if node is None:
             return
-        print(node._data)
-        self._print_inorder(node._left)
-        self._print_inorder(node._right)
+        print(node.data)
+        self._print_inorder(node.left)
+        self._print_inorder(node.right)
 
     def _print_postorder(self, node):
         if node is None:
             return
-        self._print_inorder(node._left)
-        self._print_inorder(node._right)
-        print(node._data)
+        self._print_inorder(node.left)
+        self._print_inorder(node.right)
+        print(node.data)
