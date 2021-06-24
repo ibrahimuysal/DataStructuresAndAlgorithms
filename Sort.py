@@ -121,6 +121,7 @@ def selection_sort(lst):
 
     return lst
 
+
 #############################################################
 # pick key current index + 1, then iterate through list, compare key with each item to find smaller
 # then insert key
@@ -134,5 +135,62 @@ def insertion_sort(lst):
             j -= 1
 
         lst[j + 1] = key
+
+    return lst
+
+
+###############################################################
+
+def counting_sort(lst):
+    count_lst = [0] * (max(lst) + 1)
+    output_lst = [0] * len(lst)
+
+    for i in range(len(lst)):
+        count_lst[lst[i]] += 1
+
+    # calculate actual position in output list
+    for i in range(1, len(count_lst)):
+        count_lst[i] += count_lst[i - 1]
+
+    # find index from list and count_list then put in output
+    for i in range(len(lst) - 1, -1, -1):
+        output_lst[count_lst[lst[i]] - 1] = lst[i]
+        count_lst[lst[i]] -= 1
+
+    lst = output_lst
+
+    return lst
+
+
+#############################################################
+
+def counting_sort(lst, position):
+    count_lst = [0] * (max(lst) + 1)
+    output_lst = [0] * len(lst)
+
+    for i in range(len(lst)):
+        count_lst[(lst[i] // position) % 10] += 1
+
+    # calculate actual position in output list
+    for i in range(1, len(count_lst)):
+        count_lst[i] += count_lst[i - 1]
+
+    # find index from list and count_list then put in output
+    for i in range(len(lst) - 1, -1, -1):
+        output_lst[count_lst[(lst[i] // position) % 10] - 1] = lst[i]
+        count_lst[(lst[i] // position) % 10] -= 1
+
+    lst = output_lst
+
+    return lst
+
+
+def radix_sort(lst):
+    max_item = max(lst)
+
+    position = 1  # base10 - decimal
+    while max_item // position > 0:
+        lst = counting_sort(lst, position)
+        position *= 10
 
     return lst
