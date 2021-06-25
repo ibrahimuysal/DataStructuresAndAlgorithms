@@ -21,7 +21,7 @@ class BinarySearchTree:
         if self.is_empty():
             self._root = node
             self._size += 1
-            return
+            return node
         self._insert(self._root, node)
 
     def remove(self, value):
@@ -31,6 +31,9 @@ class BinarySearchTree:
         self._delete_Node(self._root, value)
 
     def _delete_Node(self, root, value):
+        if root is None:
+            return root
+
         if value < root.data:
             root.left = self._delete_Node(root.left, value)
         elif value > root.data:
@@ -39,12 +42,15 @@ class BinarySearchTree:
             if root.is_leaf():
                 root = None
                 self._size -= 1
+                return root
             elif root.has_right():
-                root = self._get_successor(root)
-                self._size -= 1
+                successor = self._get_successor(root)
+                root.data = successor.data
+                root.right = self._delete_Node(root.right, root.data)
             else:
-                root = self._get_predecessor(root)
-                self._size -= 1
+                predecessor = self._get_predecessor(root)
+                root.data = predecessor.data
+                root.left = self._delete_Node(root.left, root.data)
 
         return root
 
@@ -71,11 +77,11 @@ class BinarySearchTree:
             root._right = node
             self._size += 1
         elif node.data < root.data:
-            self._insert(root.left, node)
-        elif node.data > root.data:
-            self._insert(root.right, node)
+            root.left = self._insert(root.left, node)
         else:
-            return
+            root.right = self._insert(root.right, node)
+
+        return root
 
     def _print_inorder(self, node):
         if node is None:
